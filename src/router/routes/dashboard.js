@@ -10,13 +10,13 @@ const dashboard = {
       meta: { auth: true },
     },
     {
-      path: "tables",
+      path: "dashboard/todo",
       name: "Tables",
       component: () => import("@/views/Dashboard/ToDoList.vue"),
       meta: { auth: true },
     },
     {
-      path: "tables/:id",
+      path: "dashboard/todo/:id",
       name: "update",
       component: () => import("@/views/Dashboard/updateTodo.vue"),
       meta: { auth: true },

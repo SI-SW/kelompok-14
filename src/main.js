@@ -1,8 +1,8 @@
 import { createApp } from "vue";
-import { createPinia } from 'pinia';
+import { createPinia } from "pinia";
 import App from "./App.vue";
 import store from "./store";
-import router from "./router";
+import router from "./router/index";
 import "./assets/css/nucleo-icons.css";
 import "./assets/css/nucleo-svg.css";
 import ArgonDashboard from "./argon-dashboard";

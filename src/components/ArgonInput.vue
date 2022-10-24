@@ -10,9 +10,12 @@
         :class="getClasses(size, valid)"
         :name="name"
         :id="id"
-        :value="value"
+        :value="modelValue"
         :placeholder="placeholder"
         :isRequired="isRequired"
+        required
+        @change="$emit('update:modelValue', $event.target.value)"
+        :disabled="isDisabled"
       />
       <span v-if="iconDir === 'right'" class="input-group-text">
         <i :class="getIcon(icon)"></i>
@@ -24,6 +27,7 @@
 <script>
 export default {
   name: "argon-input",
+  emits: ["update:modelValue"],
   props: {
     size: {
       type: String,
@@ -37,10 +41,11 @@ export default {
     iconDir: String,
     name: String,
     id: String,
-    value: String,
+    modelValue: String,
     placeholder: String,
     type: String,
     isRequired: Boolean,
+    isDisabled: Boolean,
   },
   methods: {
     getClasses: (size, valid) => {

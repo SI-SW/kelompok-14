@@ -58,8 +58,8 @@ export default {
   props: ["textPrimary", "textSecondary", "iconClass"],
   data() {
     return {
-      img
+      img,
     };
-  }
+  },
 };
 </script>

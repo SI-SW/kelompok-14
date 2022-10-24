@@ -17,7 +17,7 @@
             <div class="col-auto">
               <div class="avatar avatar-xl position-relative">
                 <img
-                  src="../assets/img/team-1.jpg"
+                  src="@/assets/img/team-1.jpg"
                   alt="profile_image"
                   class="shadow-sm w-100 border-radius-lg"
                 />
@@ -25,8 +25,8 @@
             </div>
             <div class="col-auto my-auto">
               <div class="h-100">
-                <h5 class="mb-1">Sayo Kravits</h5>
-                <p class="mb-0 font-weight-bold text-sm">Public Relations</p>
+                <h5 class="mb-1">{{ g$user.name }}</h5>
+                <p class="mb-0 font-weight-bold text-sm">{{ g$user.id }}</p>
               </div>
             </div>
             <div
@@ -199,7 +199,7 @@
     </div>
     <div class="py-4 container-fluid">
       <div class="row">
-        <div class="col-md-8">
+        <div class="col-12">
           <div class="card">
             <div class="card-header pb-0">
               <div class="d-flex align-items-center">
@@ -216,76 +216,28 @@
                   <label for="example-text-input" class="form-control-label"
                     >Username</label
                   >
-                  <argon-input type="text" value="lucky.jesse" />
+                  <argon-input
+                    type="text"
+                    value="lucky.jesse"
+                    v-model="g$user.name"
+                    isDisabled="true"
+                  />
                 </div>
                 <div class="col-md-6">
                   <label for="example-text-input" class="form-control-label"
                     >Email address</label
                   >
-                  <argon-input type="email" value="jesse@example.com" />
-                </div>
-                <div class="col-md-6">
-                  <label for="example-text-input" class="form-control-label"
-                    >First name</label
-                  >
-                  <input class="form-control" type="text" value="Jesse" />
-                </div>
-                <div class="col-md-6">
-                  <label for="example-text-input" class="form-control-label"
-                    >Last name</label
-                  >
-                  <argon-input type="text" value="Lucky" />
-                </div>
-              </div>
-              <hr class="horizontal dark" />
-              <p class="text-uppercase text-sm">Contact Information</p>
-              <div class="row">
-                <div class="col-md-12">
-                  <label for="example-text-input" class="form-control-label"
-                    >Address</label
-                  >
                   <argon-input
-                    type="text"
-                    value="Bld Mihail Kogalniceanu, nr. 8 Bl 1, Sc 1, Ap 09"
-                  />
-                </div>
-                <div class="col-md-4">
-                  <label for="example-text-input" class="form-control-label"
-                    >City</label
-                  >
-                  <argon-input type="text" value="New York" />
-                </div>
-                <div class="col-md-4">
-                  <label for="example-text-input" class="form-control-label"
-                    >Country</label
-                  >
-                  <argon-input type="text" value="United States" />
-                </div>
-                <div class="col-md-4">
-                  <label for="example-text-input" class="form-control-label"
-                    >Postal code</label
-                  >
-                  <argon-input type="text" value="437300" />
-                </div>
-              </div>
-              <hr class="horizontal dark" />
-              <p class="text-uppercase text-sm">About me</p>
-              <div class="row">
-                <div class="col-md-12">
-                  <label for="example-text-input" class="form-control-label"
-                    >About me</label
-                  >
-                  <argon-input
-                    type="text"
-                    value="A beautiful Dashboard for Bootstrap 5. It is Free and Open Source."
+                    type="email"
+                    value="jesse@example.com"
+                    v-model="g$user.id"
+                    isDisabled="true"
+
                   />
                 </div>
               </div>
             </div>
           </div>
-        </div>
-        <div class="col-md-4">
-          <profile-card />
         </div>
       </div>
     </div>
@@ -295,9 +247,11 @@
 <script>
 import setNavPills from "@/assets/js/nav-pills.js";
 import setTooltip from "@/assets/js/tooltip.js";
-import ProfileCard from "./components/ProfileCard.vue";
+import ProfileCard from "@/components/example/ProfileCard.vue";
 import ArgonInput from "@/components/ArgonInput.vue";
 import ArgonButton from "@/components/ArgonButton.vue";
+import { mapActions, mapState } from "pinia";
+import d$auth from "@/store/auth";
 
 const body = document.getElementsByTagName("body")[0];
 
@@ -305,9 +259,10 @@ export default {
   name: "profile",
   data() {
     return {
-      showMenu: false
+      showMenu: false,
     };
   },
+
   components: { ProfileCard, ArgonInput, ArgonButton },
 
   mounted() {
@@ -315,6 +270,7 @@ export default {
     setNavPills();
     setTooltip();
   },
+
   beforeMount() {
     this.$store.state.imageLayout = "profile-overview";
     this.$store.state.showNavbar = false;
@@ -329,6 +285,25 @@ export default {
     this.$store.state.showFooter = true;
     this.$store.state.hideConfigButton = false;
     body.classList.remove("profile-overview");
-  }
+  },
+
+  methods: {
+    ...mapActions(d$auth, ["a$setUser"]),
+    async getUser() {
+      try {
+        await this.a$setUser;
+      } catch (error) {
+        console.error("method getUser error", error);
+      }
+    },
+  },
+
+  computed: {
+    ...mapState(d$auth, ["g$user"]),
+  },
+
+  async created() {
+    await this.a$setUser();
+  },
 };
 </script>
